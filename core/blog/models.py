@@ -1,10 +1,13 @@
 
 from django.db import models
-from accounts.models import User
+from django.contrib.auth import get_user_model
+
+# geting user model object 
+User = get_user_model()
 
 # Create your models here.
 class Post(models.Model):
-    author = models.ForeignKey(User, on_delete=CASCADE)
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
     image = models.ImageField(null=True,blank=True)
     title = models.CharField(max_length=250)
     content = models.TextField()
@@ -13,6 +16,7 @@ class Post(models.Model):
 
     create_date = models.DateTimeField(auto_now_add=True)
     update_date = models.DateTimeField(auto_now=True)
+    #published_date = models.DateTimeField()
 
     def __str__(self):
         return self.title
