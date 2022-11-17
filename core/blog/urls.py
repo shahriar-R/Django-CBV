@@ -18,5 +18,5 @@ urlpatterns = [
         views.PostDeleteView.as_view(),
         name="post-delete",
     ),
-    #path("api/v1/", include("blog.api.v1.urls")),
+    path("api/v1/", include("blog.api.v1.urls")),
 ]
