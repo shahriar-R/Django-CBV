@@ -40,9 +40,19 @@ urlpatterns = [
     path("api-auth/", include("rest_framework.urls")),
     path("accounts/", include("accounts.urls")),
     path("", indexView, name="index"),
-    path("blog/", include("blog.urls")),
+    path("blog/", include("blog.urls"))
     # path('api-docs/',include_docs_urls(title='api sample')),
-    '''path(
+    
+]
+
+#Serving static files during development¶
+if settings.DEBUG:
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+
+'''
+    path(
         "swagger/output.json",
         schema_view.without_ui(cache_timeout=0),
         name="schema-json",
@@ -56,10 +66,5 @@ urlpatterns = [
         "redoc/",
         schema_view.with_ui("redoc", cache_timeout=0),
         name="schema-redoc",
-    ),'''
-]
-
-#Serving static files during development¶
-if settings.DEBUG:
-    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    ),
+    '''
