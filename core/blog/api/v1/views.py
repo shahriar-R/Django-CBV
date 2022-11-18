@@ -7,9 +7,13 @@ from django.shortcuts import get_object_or_404
 from rest_framework.generics import ListCreateAPIView,RetrieveUpdateDestroyAPIView
 from rest_framework import mixins
 from rest_framework import viewsets
+from .permissions import IsOwnerOrReadOnly
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.filters import SearchFilter, OrderingFilter
 
-from .serializers import PostSerializer
-from ...models import Post
+from .serializers import CategorySerializer, PostSerializer
+from ...models import Category, Post
+from .paginations import CustomPagination
 
 
 '''
@@ -119,7 +123,7 @@ class PostDetail(RetrieveUpdateDestroyAPIView):
 
 
     
-class PostViewSet(viewsets.ViewSet):
+class PostViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
     serializer_class = PostSerializer
     queryset = Post.objects.filter(status=True)
@@ -145,7 +149,21 @@ class PostViewSet(viewsets.ViewSet):
     def destroy(self, request, pk=None):
         pass
 
+class PostModelViewSet(viewsets.ModelViewSet):
+    permission_classes = [IsAuthenticatedOrReadOnly,IsOwnerOrReadOnly]
+    serializer_class = PostSerializer
+    queryset = Post.objects.filter(status=True)
+    filter_backends = [DjangoFilterBackend,SearchFilter,OrderingFilter]
+    filterset_fields = {'category':["exact","in"],'author':["exact"],'status':["exact"]}
+    search_fields = ['title','context']
+    ordering_fields = ['create_date']
+    pagination_class = CustomPagination
 
+class CategoryModelViewSet(viewsets.ModelViewSet):
+    permission_classes = [IsAuthenticatedOrReadOnly]
+    serializer_class = CategorySerializer
+    queryset = Category.objects.all()
 
+ 
  
     
