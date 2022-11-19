@@ -41,7 +41,9 @@ INSTALLED_APPS = [
     'accounts',
     'blog',
     'rest_framework',
-    'django-filter',
+    'django_filters',
+    'drf_yasg',
+    
 ]
 
 MIDDLEWARE = [
