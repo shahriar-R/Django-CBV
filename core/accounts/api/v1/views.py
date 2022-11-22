@@ -27,6 +27,7 @@ from .utils import EmailThread
 
 User = get_user_model()
 
+
 class RegistrationApiView(generics.GenericAPIView):
     serializer_class = RegistrationSerializer
 
@@ -53,8 +54,6 @@ class RegistrationApiView(generics.GenericAPIView):
         return str(refresh.access_token)
 
 
-
-
 class CustomObtainAuthToken(ObtainAuthToken):
     serializer_class = CustomAuthTokenSerializer
 
@@ -68,7 +67,6 @@ class CustomObtainAuthToken(ObtainAuthToken):
         return Response({"token": token.key, "user_id": user.pk, "email": user.email})
 
 
-
 class CustomDiscardAuthToken(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -79,6 +77,7 @@ class CustomDiscardAuthToken(APIView):
 
 class CustomTokenObtainPairView(TokenObtainPairView):
     serializer_class = CustomTokenObtainPairSerializer
+
 
 class ChangePasswordApiView(generics.GenericAPIView):
     model = User
@@ -107,6 +106,7 @@ class ChangePasswordApiView(generics.GenericAPIView):
                 status=status.HTTP_200_OK,
             )
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 class ProfileApiView(generics.RetrieveUpdateAPIView):
     serializer_class = ProfileSerializer

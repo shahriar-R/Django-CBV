@@ -1,10 +1,13 @@
-
-from rest_framework.permissions import IsAuthenticated,IsAuthenticatedOrReadOnly,IsAdminUser
+from rest_framework.permissions import (
+    IsAuthenticated,
+    IsAuthenticatedOrReadOnly,
+    IsAdminUser,
+)
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from django.shortcuts import get_object_or_404
-from rest_framework.generics import ListCreateAPIView,RetrieveUpdateDestroyAPIView
+from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
 from rest_framework import mixins
 from rest_framework import viewsets
 from .permissions import IsOwnerOrReadOnly
@@ -16,7 +19,7 @@ from ...models import Category, Post
 from .paginations import CustomPagination
 
 
-'''
+"""
 from rest_framework.decorators import api_view, permission_classes
 
 @api_view(["GET","POST"])
@@ -48,7 +51,7 @@ def postDetail(request,id):
     elif request.method == "DELETE":
         post.delete()
         return Response({"delete":"item removed successfully"},status=status.HTTP_204_NO_CONTENT)
-'''
+"""
 
 '''class PostList(APIView):
     """geting a list of posts and creating new post"""
@@ -67,12 +70,13 @@ def postDetail(request,id):
         serializer.save()
         return Response(serializer.data)'''
 
+
 class PostList(ListCreateAPIView):
     """geting a list of posts and creating new post"""
+
     permission_classes = [IsAuthenticated]
     serializer_class = PostSerializer
     queryset = Post.objects.filter(status=True)
-
 
 
 '''class PostDetail(APIView):
@@ -98,7 +102,7 @@ class PostList(ListCreateAPIView):
         post.delete()
         return Response({"delete":"item removed successfully"},status=status.HTTP_204_NO_CONTENT)'''
 
-'''class PostDetail(GenericAPIView,
+"""class PostDetail(GenericAPIView,
                 mixins.RetrieveModelMixin,
                 mixins.UpdateModelMixin,
                 mixins.DestroyModelMixin):
@@ -114,7 +118,8 @@ class PostList(ListCreateAPIView):
         return self.update(request,*args,**kwargs)
 
     def delete(self,request, *args,**kwargs):
-        return self.destroy(request,*args,**kwargs)'''
+        return self.destroy(request,*args,**kwargs)"""
+
 
 class PostDetail(RetrieveUpdateDestroyAPIView):
     permission_classes = [IsAuthenticated]
@@ -122,7 +127,6 @@ class PostDetail(RetrieveUpdateDestroyAPIView):
     queryset = Post.objects.filter(status=True)
 
 
-    
 class PostViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
     serializer_class = PostSerializer
@@ -149,21 +153,23 @@ class PostViewSet(viewsets.ModelViewSet):
     def destroy(self, request, pk=None):
         pass
 
+
 class PostModelViewSet(viewsets.ModelViewSet):
-    permission_classes = [IsAuthenticatedOrReadOnly,IsOwnerOrReadOnly]
+    permission_classes = [IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]
     serializer_class = PostSerializer
     queryset = Post.objects.filter(status=True)
-    filter_backends = [DjangoFilterBackend,SearchFilter,OrderingFilter]
-    filterset_fields = {'category':["exact","in"],'author':["exact"],'status':["exact"]}
-    search_fields = ['title','context']
-    ordering_fields = ['create_date']
+    filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
+    filterset_fields = {
+        "category": ["exact", "in"],
+        "author": ["exact"],
+        "status": ["exact"],
+    }
+    search_fields = ["title", "context"]
+    ordering_fields = ["create_date"]
     pagination_class = CustomPagination
+
 
 class CategoryModelViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticatedOrReadOnly]
     serializer_class = CategorySerializer
     queryset = Category.objects.all()
-
- 
- 
-    

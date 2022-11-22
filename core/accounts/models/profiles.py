@@ -8,7 +8,7 @@ class Profile(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     first_name = models.CharField(max_length=250)
     last_name = models.CharField(max_length=250)
-    image = models.ImageField(null=True,blank=True)
+    image = models.ImageField(null=True, blank=True)
     description = models.TextField()
     create_date = models.DateTimeField(auto_now_add=True)
     update_date = models.DateTimeField(auto_now=True)
@@ -16,7 +16,8 @@ class Profile(models.Model):
     def __str__(self):
         return self.user.email
 
-@receiver(post_save,sender=User)
-def my_callback(sender,instance,created, **kwargs):
+
+@receiver(post_save, sender=User)
+def my_callback(sender, instance, created, **kwargs):
     if created:
         Profile.objects.create(user=instance)
